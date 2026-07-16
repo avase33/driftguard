@@ -1,0 +1,35 @@
+name: Automated Retraining
+
+# Phase 5: the drift webhook posts a `repository_dispatch` with type
+# `drift-detected`; this workflow retrains, evaluates, registers a new model
+# version, and (in a real setup) rebuilds/redeploys the serving container.
+on:
+  repository_dispatch:
+    types: [drift-detected]
+  workflow_dispatch: {}
+
+jobs:
+  retrain:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e .
+      - name: Show drift payload
+        run: echo "Drift event -> ${{ toJSON(github.event.client_payload) }}"
+      - name: Retrain + register new model version
+        run: python scripts/retrain.py | tee retrain_summary.json
+      - name: Upload new model version
+        uses: actions/upload-artifact@v4
+        with:
+          name: retrained-model
+          path: |
+            retrain_summary.json
+            mlruns_local/
+      # A production job would here rebuild the Docker image and redeploy the
+      # serving container (e.g. push to GHCR + trigger the deploy environment).

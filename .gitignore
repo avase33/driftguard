@@ -1,0 +1,38 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+build/
+dist/
+.eggs/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+env/
+
+# Registry / MLflow / generated
+mlruns_local/
+mlruns/
+mlflow.db
+*.jsonl
+
+# Env / secrets
+.env
+
+# OS / editors
+.DS_Store
+.idea/
+.vscode/
+
+# Local verification helpers
+verify_driftguard.py
+verify_tiny.py
+run_driftguard_verify.bat
+run_tiny.bat
+run_console.txt
+driftguard_verify_output.txt
+driftguard_tiny_output.txt

@@ -1,0 +1,62 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "driftguard"
+version = "0.1.0"
+description = "Real-time streaming & drift-detection MLOps pipeline: fraud model + PSI drift detection + automated self-retraining"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "Akhil Vase" }]
+keywords = ["mlops", "drift-detection", "psi", "xgboost", "gradient-boosting", "kafka", "mlflow", "fraud"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Topic :: Scientific/Engineering :: Artificial Intelligence",
+  "Intended Audience :: Developers",
+]
+dependencies = []
+
+[project.optional-dependencies]
+serve = ["fastapi>=0.110", "uvicorn[standard]>=0.29", "pydantic>=2.6"]
+xgboost = ["xgboost>=2.0", "numpy>=1.24"]
+mlflow = ["mlflow>=2.12"]
+kafka = ["kafka-python>=2.0"]
+evidently = ["evidently>=0.4"]
+dev = ["pytest>=8.0", "pytest-cov>=4.1", "ruff>=0.4", "mypy>=1.9"]
+
+[project.urls]
+Homepage = "https://github.com/avase33/driftguard"
+Repository = "https://github.com/avase33/driftguard"
+Issues = "https://github.com/avase33/driftguard/issues"
+
+[project.scripts]
+driftguard = "driftguard.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["driftguard*"]
+
+[tool.setuptools.package-data]
+driftguard = ["py.typed"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 110
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["E501", "B008"]
+
+[tool.mypy]
+python_version = "3.10"
+ignore_missing_imports = true
